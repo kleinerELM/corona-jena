@@ -1,4 +1,4 @@
-set terminal pngcairo enhanced transparent truecolor font "Linux Libertine O,16" size 800, 400 dl 2.0 
+set terminal pngcairo enhanced background rgb "#f2f2f2" truecolor font "Linux Libertine O,16" size 800, 400 dl 2.0 
 set encoding utf8
 set minussign
 
@@ -28,7 +28,7 @@ stats "<cat ../data/cases_erfurt.csv | awk -F, '{print $2, $5}'" u 2 prefix "C" 
 
 angle(x)=x*360/A_max
 
-centerX=0
+centerX=-0.15
 centerY=0
 radius=0.8
 
@@ -39,7 +39,7 @@ ypos(i) = yposmax - i*(yposmax-yposmin)/(4)
 
 set style fill solid 1
 set size ratio -1
-set xrange [-1.75*radius:3.3*radius]
+set xrange [-1.45*radius:3.6*radius]
 set yrange [-radius:radius]
 
 pos = 90

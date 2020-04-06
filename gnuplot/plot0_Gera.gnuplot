@@ -2,7 +2,9 @@ set terminal pngcairo enhanced background rgb "#f2f2f2" truecolor font "Linux Li
 set encoding utf8
 set minussign
 
-set output '../plot0_Weimar.png'
+set output '../plot0_Gera.png'
+
+set datafile separator ","
 
 # pie chart inspired by:
 # https://stackoverflow.com/questions/31896718/generation-of-pie-chart-using-gnuplot
@@ -18,13 +20,13 @@ unset border
 update_str = "letztes Update: " . system("date +%d.%m.,\\ %H\\:%M") . " Uhr"
 
 # gets sum of infected people
-stats "<cat ../data/cases_weimar.dat | awk '{print $2, $2}'" u 2 prefix "A" nooutput
+stats "<cat ../data/cases_gera.csv | awk -F, '{print $2}'" u 1 prefix "A" nooutput
 
 # gets maximum number of recovered people
-stats "<cat ../data/cases_weimar.dat | awk '{print $2, $3}'" u 2 prefix "B" nooutput
+stats "<cat ../data/cases_gera.csv | awk -F, '{print $3}'" u 1 prefix "B" nooutput
 
 # gets maximum number of deceased
-stats "<cat ../data/cases_weimar.dat | awk '{print $2, $4}'" u 2 prefix "C" nooutput
+stats "<cat ../data/cases_gera.csv | awk -F, '{print $4}'" u 1 prefix "C" nooutput
 
 angle(x)=x*360/A_max
 
@@ -45,7 +47,7 @@ set yrange [-radius:radius]
 pos = 90
 
 plot \
-     "<echo 0" u (xpos):(ypos(1)):(sprintf("%i bestätigte Fälle in Weimar", A_max)) w labels left offset 2.5, 0, \
+     "<echo 0" u (xpos):(ypos(1)):(sprintf("%i bestätigte Fälle in Gera", A_max)) w labels left offset 2.5, 0, \
      "<echo 0" u (centerX):(centerY):(radius):(pos):(pos=pos+angle(A_max-B_max-C_max)) w circle fc rgb "#0241b5", \
      "<echo 0" u (xpos):(ypos(2)) w p pt 5 ps 4 lc rgb "#0241b5", \
      "<echo 0" u (xpos):(ypos(2)):(sprintf("%i aktive Fälle (%.1f%%)", A_max - B_max - C_max, 100*(A_max-B_max-C_max)/A_max)) w labels left offset 2.5, 0, \
@@ -57,4 +59,4 @@ plot \
      "<echo 0" u (xpos):(ypos(4)):(sprintf("%i Verstorbene (%.1f%%)", C_max, 100*C_max/A_max)) w labels left offset 2.5, 0, \
      "<echo 0" u (xpos):(ypos(5.5)):(" ") w labels font ", 12" left offset 2.5, 0, \
      "<echo 0" u (xpos):(ypos(6.5)):(update_str) w labels font ", 12" left offset 2.5, 0, \
-     "<echo 0" u (xpos):(ypos(7.5)):("Quelle: Stadt Weimar") w labels font ", 12" left offset 2.5, 0
+     "<echo 0" u (xpos):(ypos(7.5)):("Quelle: Stadt Gera") w labels font ", 12" left offset 2.5, 0
